@@ -1,0 +1,144 @@
+<view class="container">
+  <!-- 头部介绍 -->
+  <view class="header">
+    <view class="logo">🤖</view>
+    <view class="title">AI软件开发团队</view>
+    <view class="subtitle">让AI团队帮你完成软件开发</view>
+    <view class="task-link" bindtap="onViewTasks">📋 查看任务列表</view>
+  </view>
+
+  <!-- 团队介绍卡片 -->
+  <view class="card team-card">
+    <view class="section-title">👥 专业团队</view>
+    <view class="team-members">
+      <view class="member">
+        <view class="member-icon">👨‍💼</view>
+        <view class="member-name">产品经理</view>
+        <view class="member-desc">需求分析</view>
+      </view>
+      <view class="member">
+        <view class="member-icon">👨‍💻</view>
+        <view class="member-name">工程师</view>
+        <view class="member-desc">代码实现</view>
+      </view>
+      <view class="member">
+        <view class="member-icon">🔍</view>
+        <view class="member-name">代码审查员</view>
+        <view class="member-desc">质量检查</view>
+      </view>
+      <view class="member">
+        <view class="member-icon">👤</view>
+        <view class="member-name">用户代理</view>
+        <view class="member-desc">测试反馈</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 任务输入表单 -->
+  <view class="card">
+    <view class="section-title">📝 描述你的需求</view>
+
+    <!-- 项目名称 -->
+    <view class="form-group">
+      <view class="form-label">项目名称</view>
+      <input
+        class="form-input"
+        placeholder="例如：待办事项应用"
+        value="{{projectName}}"
+        bindinput="onProjectNameInput"
+      />
+    </view>
+
+    <!-- 项目类型 -->
+    <view class="form-group">
+      <view class="form-label">项目类型</view>
+      <view class="type-tags">
+        <view
+          class="tag {{selectedType === item.value ? 'active' : ''}}"
+          wx:for="{{projectTypes}}"
+          wx:key="value"
+          bindtap="onTypeSelect"
+          data-value="{{item.value}}"
+        >
+          {{item.icon}} {{item.label}}
+        </view>
+      </view>
+    </view>
+
+    <!-- 核心功能 -->
+    <view class="form-group">
+      <view class="form-label">核心功能描述</view>
+      <textarea
+        class="form-textarea"
+        placeholder="请详细描述你想要实现的功能，越详细越好&#10;&#10;例如：&#10;1. 用户可以添加、删除、编辑待办事项&#10;2. 支持按日期分类查看&#10;3. 可以设置提醒功能"
+        value="{{coreFeatures}}"
+        bindinput="onCoreFeaturesInput"
+        maxlength="1000"
+      />
+      <view class="char-count">{{coreFeatures.length}}/1000</view>
+    </view>
+
+    <!-- 技术要求 -->
+    <view class="form-group">
+      <view class="form-label">技术要求（可选）</view>
+      <textarea
+        class="form-textarea small"
+        placeholder="例如：使用Vue3框架、需要响应式设计、支持暗黑模式等"
+        value="{{techRequirements}}"
+        bindinput="onTechRequirementsInput"
+        maxlength="500"
+      />
+    </view>
+
+    <!-- 其他说明 -->
+    <view class="form-group">
+      <view class="form-label">其他说明（可选）</view>
+      <textarea
+        class="form-textarea small"
+        placeholder="任何补充信息，如参考案例、设计风格偏好等"
+        value="{{otherNotes}}"
+        bindinput="onOtherNotesInput"
+        maxlength="500"
+      />
+    </view>
+  </view>
+
+  <!-- 进度显示 -->
+  <view class="card progress-card" wx:if="{{isLoading}}">
+    <view class="progress-header">
+      <view class="progress-icon">⏳</view>
+      <view class="progress-title">AI团队正在协作</view>
+    </view>
+
+    <!-- 进度条 -->
+    <view class="progress-bar-container">
+      <view class="progress-bar" style="width:{{progress}}%"></view>
+    </view>
+    <view class="progress-text">{{progress}}%</view>
+
+    <!-- 当前步骤 -->
+    <view class="progress-step">
+      <view class="step-dot {{progress >= 25 ? 'active' : ''}}"></view>
+      <view class="step-dot {{progress >= 50 ? 'active' : ''}}"></view>
+      <view class="step-dot {{progress >= 75 ? 'active' : ''}}"></view>
+      <view class="step-dot {{progress >= 100 ? 'active' : ''}}"></view>
+    </view>
+
+    <view class="progress-desc">{{loadingText}}</view>
+
+    <!-- 取消按钮 -->
+    <button class="btn-cancel" bindtap="onCancel">取消任务</button>
+  </view>
+
+  <!-- 提交按钮 -->
+  <view class="submit-section" wx:if="{{!isLoading}}">
+    <button
+      class="btn-primary submit-btn"
+      bindtap="onSubmit"
+      disabled="{{!isFormValid}}"
+    >
+      🚀 启动开发
+    </button>
+    <view class="tip">AI团队将自动进行需求分析、代码实现和审查</view>
+  </view>
+</view>

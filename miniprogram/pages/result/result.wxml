@@ -1,0 +1,67 @@
+<view class="container">
+  <!-- 状态头部 -->
+  <view class="status-header {{isSuccess ? 'success' : 'error'}}">
+    <view class="status-icon">{{isSuccess ? '✅' : '❌'}}</view>
+    <view class="status-text">{{statusText}}</view>
+    <view class="status-desc">{{statusDesc}}</view>
+  </view>
+
+  <!-- 协作流程 -->
+  <view class="card">
+    <view class="section-title">👥 协作流程</view>
+    <view class="timeline">
+      <view class="timeline-item {{item.completed ? 'completed' : ''}}" wx:for="{{timeline}}" wx:key="step">
+        <view class="timeline-dot"></view>
+        <view class="timeline-content">
+          <view class="timeline-title">{{item.title}}</view>
+          <view class="timeline-desc">{{item.desc}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 智能体对话记录 -->
+  <view class="card" wx:if="{{conversations.length > 0}}">
+    <view class="section-title">💬 团队讨论</view>
+    <view class="conversations">
+      <view class="conversation-item" wx:for="{{conversations}}" wx:key="index">
+        <view class="conv-header">
+          <view class="conv-avatar">{{item.avatar}}</view>
+          <view class="conv-name">{{item.name}}</view>
+          <view class="conv-role">{{item.role}}</view>
+        </view>
+        <view class="conv-content">
+          <text user-select>{{item.content}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 生成的代码 -->
+  <view class="card" wx:if="{{generatedCode}}">
+    <view class="section-title">💻 生成的代码</view>
+    <view class="code-block">
+      <view class="code-header">
+        <text>{{codeFileName}}</text>
+        <view class="copy-btn" bindtap="onCopyCode">复制</view>
+      </view>
+      <scroll-view scroll-x class="code-scroll">
+        <pre class="code-content"><text user-select>{{generatedCode}}</text></pre>
+      </scroll-view>
+    </view>
+  </view>
+
+  <!-- 审查意见 -->
+  <view class="card" wx:if="{{reviewComments}}">
+    <view class="section-title">🔍 代码审查意见</view>
+    <view class="review-content">
+      <text user-select>{{reviewComments}}</text>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="action-section">
+    <button class="btn-primary" bindtap="onBackHome">返回首页</button>
+    <button class="btn-secondary" bindtap="onNewTask">创建新任务</button>
+  </view>
+</view>

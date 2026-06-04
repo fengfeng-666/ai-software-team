@@ -1,0 +1,71 @@
+<view class="container">
+  <!-- 头部 -->
+  <view class="header">
+    <view class="title">📋 任务列表</view>
+    <view class="subtitle">查看所有 AI 团队协作任务</view>
+  </view>
+
+  <!-- 刷新按钮 -->
+  <view class="refresh-bar">
+    <view class="task-count">共 {{tasks.length}} 个任务</view>
+    <view class="refresh-btn" bindtap="onRefresh">🔄 刷新</view>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading" wx:if="{{isLoading}}">
+    <view class="loading-icon">⏳</view>
+    <view class="loading-text">加载中...</view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty" wx:if="{{!isLoading && tasks.length === 0}}">
+    <view class="empty-icon">📭</view>
+    <view class="empty-text">暂无任务</view>
+    <view class="empty-desc">去首页创建一个任务吧</view>
+    <button class="btn-primary" bindtap="onGoHome">去创建任务</button>
+  </view>
+
+  <!-- 任务列表 -->
+  <view class="task-list" wx:if="{{!isLoading && tasks.length > 0}}">
+    <view
+      class="task-card {{item.status}}"
+      wx:for="{{tasks}}"
+      wx:key="task_id"
+      bindtap="onTaskClick"
+      data-task="{{item}}"
+    >
+      <!-- 状态标识 -->
+      <view class="task-status-badge">
+        <text wx:if="{{item.status === 'pending'}}">⏳</text>
+        <text wx:if="{{item.status === 'running'}}">🔄</text>
+        <text wx:if="{{item.status === 'completed'}}">✅</text>
+        <text wx:if="{{item.status === 'failed'}}">❌</text>
+      </view>
+
+      <!-- 任务信息 -->
+      <view class="task-info">
+        <view class="task-id">任务 #{{item.task_id}}</view>
+        <view class="task-step">{{item.current_step}}</view>
+
+        <!-- 进度条 -->
+        <view class="task-progress" wx:if="{{item.status === 'running'}}">
+          <view class="progress-bar-bg">
+            <view class="progress-bar-fill" style="width: {{item.progress}}%"></view>
+          </view>
+          <view class="progress-text">{{item.progress}}%</view>
+        </view>
+
+        <!-- 消息数量 -->
+        <view class="task-meta">
+          <text class="meta-item">💬 {{item.messages.length}} 条消息</text>
+        </view>
+      </view>
+
+      <!-- 操作按钮 -->
+      <view class="task-actions">
+        <view class="action-btn view" wx:if="{{item.status === 'completed'}}">查看</view>
+        <view class="action-btn delete" catchtap="onDelete" data-id="{{item.task_id}}">删除</view>
+      </view>
+    </view>
+  </view>
+</view>
